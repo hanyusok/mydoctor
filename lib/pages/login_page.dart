@@ -26,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
       await supabase.auth.signInWithOtp(
         email: _emailController.text.trim(),
         emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.mydoctor://login-callback/',
+            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
