@@ -1,7 +1,10 @@
 import 'dart:async';
+// import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+// import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mydoctor/main.dart';
 
@@ -57,6 +60,75 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> _signInKakao() async {
+    try {
+      setState(() {
+        _isLoading = true;
+      });
+      await supabase.auth.signInWithOAuth(OAuthProvider.kakao
+
+          // OAuthProvider.kakao,
+          // {redirectto: dotenv.env['REDIRECT_URI']!}
+          // email: _emailController.text.trim(),
+          // emailRedirectTo:
+          //     kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
+          );
+
+      // await _kakaoLogin();
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Check your kakao link!')),
+        );
+        _emailController.clear();
+      }
+    } on AuthException catch (error) {
+      if (mounted) {
+        SnackBar(
+          content: Text(error.message),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        );
+      }
+    } catch (error) {
+      if (mounted) {
+        SnackBar(
+          content: const Text('Unexpected error occurred'),
+          backgroundColor: Theme.of(context).colorScheme.error,
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
+  // Future<void> _kakaoLogin() async {
+  //   bool talkInstalled = await isKakaoTalkInstalled();
+  //   if (talkInstalled) {
+  //     try {
+  //       await AuthCodeClient.instance.authorizeWithTalk(
+  //         // redirectUri: '${REDIRECT_URI}',
+  //         redirectUri: dotenv.env['REDIRECT_URI']!,
+  //       );
+  //     } catch (error) {
+  //       log('Login with Kakao Talk fails $error');
+  //     }
+  //   } else {
+  //     // 카카오계정으로 로그인
+  //     try {
+  //       await AuthCodeClient.instance.authorize(
+  //         // redirectUri: '${REDIRECT_URI}',
+  //         redirectUri: dotenv.env['REDIRECT_URI']!,
+  //       );
+  //     } catch (error) {
+  //       log('Login with Kakao Account fails. $error');
+  //     }
+  //   }
+  // }
+
   @override
   void initState() {
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
@@ -84,6 +156,13 @@ class _LoginPageState extends State<LoginPage> {
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
         children: [
+          const Text('Sign in via KakaoTalk'),
+          ElevatedButton(
+              onPressed: () {
+                _signInKakao();
+              },
+              child: Text(_isLoading ? 'Loading' : 'Send KakaoTalk')),
+          const Spacer(),
           const Text('Sign in via the magic link with your email below'),
           const SizedBox(height: 18),
           TextFormField(

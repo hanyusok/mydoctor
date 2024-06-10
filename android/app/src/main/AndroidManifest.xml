@@ -1,7 +1,9 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" >
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" 
+        package="com.example.mydoctor">
     <uses-permission android:name="android.permission.INTERNET" />
     <application
         android:label="mydoctor"
+        android:allowBackup="true"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
@@ -39,6 +41,17 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+        <activity 
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />      
+                <data android:host="oauth"
+                    android:scheme="kakao760db3ac624dc54e93809cd3f590fa41" />
+            </intent-filter>
+        </activity>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and

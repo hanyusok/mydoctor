@@ -11,6 +11,8 @@ dependencies:
   cupertino_icons: ^1.0.6
   supabase_flutter: ^2.5.4
   flutter_dotenv: ^5.1.0
+  kakao_flutter_sdk: ^1.9.0
+  kakao_flutter_sdk_common: ^1.9.2
 
 dev_dependencies:
   flutter_test:
